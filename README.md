@@ -9,4 +9,4 @@ Parse SGQR code (Singapore Quick Response Code) as per http://www.mas.gov.sg/sgq
 ## Installation
 - Clone this repo.
 - Run `composer install`.
-- Run `composer test` or `tests/test.php` in the browser.
+- Run `composer test` in the terminal or `tests/test.php` in the browser.
