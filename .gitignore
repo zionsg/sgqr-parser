@@ -1,0 +1,10 @@
+# Ignore unnecessary files
+.DS_Store
+
+# Ignore dir containing Composer dependencies
+vendor/
+
+# Ignore confidential files
+data/
+config.php
+*.txt

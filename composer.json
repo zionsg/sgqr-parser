@@ -1,0 +1,14 @@
+{
+  "name": "zionsg/sgqr-parser",
+  "type": "project",
+
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/App/"
+    }
+  },
+
+   "scripts": {
+       "test": "php tests/test.php"
+   }
+}
