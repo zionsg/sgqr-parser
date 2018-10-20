@@ -7,4 +7,3 @@ vendor/
 # Ignore confidential files
 data/
 config.php
-*.txt

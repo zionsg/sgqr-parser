@@ -1,6 +1,6 @@
 # SGQR Parser
 
-Parse SGQR code.
+Parse SGQR code (Singapore Quick Response Code) as per http://www.mas.gov.sg/sgqr.
 
 ## Requirements
 - PHP >= 7.1
