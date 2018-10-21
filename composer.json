@@ -1,10 +1,11 @@
 {
   "name": "zionsg/sgqr-parser",
-  "type": "project",
+  "type": "library",
+  "homepage": "https://github.com/zionsg/sgqr-parser",
 
   "autoload": {
     "psr-4": {
-      "App\\": "src/App/"
+      "SgQr\\": "src/SgQr/"
     }
   },
 
