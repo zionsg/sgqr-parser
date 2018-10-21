@@ -1,6 +1,7 @@
 # SGQR Parser
 
 Parse SGQR code (Singapore Quick Response Code) as per http://www.mas.gov.sg/sgqr.
+No validation is performed at this point of time.
 
 ## Requirements
 - PHP >= 7.1
@@ -12,20 +13,20 @@ Parse SGQR code (Singapore Quick Response Code) as per http://www.mas.gov.sg/sgq
 - Run `composer test` in the terminal or `tests/test.php` in the browser.
 
 ## Add to project
-- As this library is not available on Packagist, the GitHub repository needs to be added to composer.json in project.
+- As this library is not available on Packagist, the GitHub repository needs to be added to the
+  project's `composer.json`.
 
   ```
   {
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/zionsg/ZnZend"
+            "url": "https://github.com/zionsg/sgqr-parser"
         }
     ]
   }
   ```
-- Run `composer require zionsg/sgqr-parser` to get the latest release in the `master` branch.
-- To run tests, run `composer test`.
+- Run `composer require zionsg/sgqr-parser:dev-master` to get the latest release in the `master` branch.
 
 ## Usage
 - See `tests/test.php`.
