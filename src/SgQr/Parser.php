@@ -1,7 +1,7 @@
 <?php
-namespace App;
+namespace SgQr;
 
-class SgQrParser
+class Parser
 {
     const ROOT_DATA_OBJECTS_BY_ID = 'rootDataObjectsById';
     const INFO_TEMPLATE = 'infoTemplate';
@@ -18,17 +18,42 @@ class SgQrParser
     /** @var array */
     protected $infoTemplate;
 
-    public function __construct(array $specs)
+    /**
+     * Constructor
+     *
+     * @param array $specs SGQR specifications. If not specified, default specs will be loaded.
+     */
+    public function __construct(array $specs = null)
     {
+        $specsPath = __DIR__ . '/../../config/sgqr-specs.php';
+        if (null === $specs && file_exists($specsPath)) {
+            $specs = include $specsPath;
+            $specs = is_array($specs) ? $specs : [];
+        }
+
         $this->specs = $specs;
         $this->infoTemplate = $specs[self::INFO_TEMPLATE] ?? [];
     }
 
+    /**
+     * Parse SGQR
+     *
+     * @param string $qrCode Contents of SGQR
+     * @return array
+     */
     public function parse($qrCode)
     {
         return $this->extractDataObjects($qrCode);
     }
 
+    /**
+     * Extract data objects from SQQR
+     *
+     * @param string $text Contents of SGQR
+     * @param bool $isTemplate If $text belongs to a template instead of root
+     * @param string $rootId Root ID to which template belongs to. Only specified if $isTemplate is true.
+     * @return array
+     */
     protected function extractDataObjects($text, $isTemplate = false, $rootId = null)
     {
         $result = [];
@@ -47,6 +72,16 @@ class SgQrParser
         return $result;
     }
 
+    /**
+     * Analyze single data object
+     *
+     * @param string $id ID of data object
+     * @param int $length Length of value for data object
+     * @param string $value Value for data object
+     * @param bool $isTemplate If data object belongs to a template instead of root
+     * @param string $rootId Root ID of template that data object belongs to. Only specified if $isTemplate is true.
+     * @return array
+     */
     protected function analyzeDataObject(
         $id,
         $length,
