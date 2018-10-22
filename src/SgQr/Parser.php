@@ -89,8 +89,6 @@ class Parser
         $isTemplate = false,
         $rootId = null
     ) {
-        $result = [];
-
         $info = [];
         if ($isTemplate) {
             $templateInfo = $this->specs[self::TEMPLATES_BY_ID][$rootId] ?? [];
@@ -108,13 +106,13 @@ class Parser
         }
 
         // Resolve data object
-        $result['id'] = [
-            'key' => $id,
+        $result = [
+            'id' => $id,
             'name' => $info[self::NAME] ?? '',
+            'length' => $length,
+            'value' => $value,
+            'comment' => $info[self::COMMENT] ?? '',
         ];
-        $result['length'] = $length;
-        $result['value'] = $value;
-        $result['comment'] = $info[self::COMMENT] ?? '';
 
         // Parse data object further if it is a template
         $isObjTemplate = $info[self::IS_TEMPLATE] ?? false;
