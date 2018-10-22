@@ -2,7 +2,7 @@
 // Specifications for SGQR
 
 return [
-    '_comment' => 'From "EMV QR Code Specification for Payment Systems: Merchant-Presented Mode" PDF on https://www.emvco.com/emv-technologies/qrcodes/',
+    '_comment' => 'From "EMV QR Code Specification for Payment Systems: Merchant-Presented Mode" PDF at https://www.emvco.com/emv-technologies/qrcodes/',
 
     'rootDataObjectsById' => [
         '_comment' => 'if isTemplate is true, data objects for template will be found in templatesById key',
@@ -213,7 +213,7 @@ return [
     ],
 
     'templatesById' => [
-        '_comment' => "For ID 26-51, 80-99, ['usesInfoTemplate' => true] to be interpreted as ['dataObjects' => <contents of infoTemplate key>]",
+        '_comment' => "For ID 26-51, 80-99, ['usesInfoTemplate' => true] to be interpreted as ['dataObjectsById' => (contents of infoTemplate key)]",
         '26' => ['usesInfoTemplate' => true],
         '27' => ['usesInfoTemplate' => true],
         '28' => ['usesInfoTemplate' => true],
@@ -242,7 +242,7 @@ return [
         '51' => ['usesInfoTemplate' => true],
 
         '62' => [
-            '_comment' => "For ID 50-99, ['usesInfoTemplate' => true] to be interpreted as ['dataObjects' => <contents of infoTemplate key>]",
+            '_comment' => "For ID 50-99, ['usesInfoTemplate' => true] to be interpreted as ['dataObjectsById' => (contents of infoTemplate key)]",
             'dataObjectsById' => [
                 '00' => ['name' => 'UNUSED', 'comment' => ''],
                 '01' => ['name' => 'Bill Number', 'comment' => ''],
