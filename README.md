@@ -9,8 +9,12 @@ No validation is performed at this point of time.
 
 ## Installation
 - Clone this repo.
-- Run `composer install`.
-- Run `composer test`.
+- Run `composer install` to install dependencies.
+
+## Tests
+- Run `composer test` to run tests.
+- Run `composer cs` to run coding style checks.
+- Run `composer check` to do both.
 
 ## Add to project
 - As this library is not available on Packagist, the GitHub repository needs to be added to the
