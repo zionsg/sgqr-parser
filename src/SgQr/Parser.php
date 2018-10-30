@@ -11,6 +11,7 @@ class Parser
     const DATA_OBJECTS_BY_ID = 'dataObjectsById';
     const IS_TEMPLATE = 'isTemplate';
     const USES_INFO_TEMPLATE = 'usesInfoTemplate';
+    const DATA_OBJECTS = 'dataObjects';
 
     /** @var array */
     protected $specs;
@@ -50,13 +51,16 @@ class Parser
      * Extract data objects from SQQR
      *
      * @param string $text Contents of SGQR
-     * @param bool $isTemplate If $text belongs to a template instead of root
-     * @param string $rootId Root ID to which template belongs to. Only specified if $isTemplate is true.
+     * @param array $specs Specifications for data objects under parent
      * @return array
      */
-    protected function extractDataObjects($text, $isTemplate = false, $rootId = null)
+    protected function extractDataObjects($text, array $specs = null)
     {
         $result = [];
+
+        if (null === $specs) {
+            $specs = $this->specs[self::ROOT_DATA_OBJECTS_BY_ID];
+        }
 
         $textLen = strlen($text);
         $index = 0;
@@ -66,7 +70,7 @@ class Parser
             $value = substr($text, $index + 4, $length);
             $index += 4 + $length;
 
-            $result[] = $this->analyzeDataObject($id, $length, $value, $isTemplate, $rootId);
+            $result[] = $this->analyzeDataObject($id, $length, $value, $specs[$id] ?? []);
         }
 
         return $result;
@@ -78,46 +82,35 @@ class Parser
      * @param string $id ID of data object
      * @param int $length Length of value for data object
      * @param string $value Value for data object
-     * @param bool $isTemplate If data object belongs to a template instead of root
-     * @param string $rootId Root ID of template that data object belongs to. Only specified if $isTemplate is true.
+     * @param array $specs Specifications for data object
      * @return array
      */
-    protected function analyzeDataObject(
-        $id,
-        $length,
-        $value,
-        $isTemplate = false,
-        $rootId = null
-    ) {
-        $info = [];
+    protected function analyzeDataObject($id, $length, $value, array $specs)
+    {
+        // Does specs belong to a template? If yes, get template info and child data objects if any.
+        $isTemplate = $specs[self::IS_TEMPLATE] ?? false;
         if ($isTemplate) {
-            $templateInfo = $this->specs[self::TEMPLATES_BY_ID][$rootId] ?? [];
-            if ($templateInfo[self::USES_INFO_TEMPLATE] ?? false) {
-                $templateInfo[self::DATA_OBJECTS_BY_ID] = $this->infoTemplate;
-            }
-
-            $info = $templateInfo[self::DATA_OBJECTS_BY_ID][$id] ?? [];
-        } else {
-            $info = $this->specs[self::ROOT_DATA_OBJECTS_BY_ID][$id] ?? [];
+            $specs = array_merge($specs, $this->specs[self::TEMPLATES_BY_ID][$id] ?? []);
         }
 
-        if ($info[self::USES_INFO_TEMPLATE] ?? false) {
-            $info[self::DATA_OBJECTS_BY_ID] = $this->infoTemplate;
+        // Does specs use info template? If yes, populate child data objects with it.
+        $usesInfoTemplate = $specs[self::USES_INFO_TEMPLATE] ?? false;
+        if ($usesInfoTemplate) {
+            $specs[self::DATA_OBJECTS_BY_ID] = $this->infoTemplate;
         }
 
         // Resolve data object
         $result = [
             'id' => $id,
-            'name' => $info[self::NAME] ?? '',
+            'name' => $specs[self::NAME] ?? '',
             'length' => $length,
             'value' => $value,
-            'comment' => $info[self::COMMENT] ?? '',
+            'comment' => $specs[self::COMMENT] ?? '',
         ];
 
         // Parse data object further if it is a template
-        $isObjTemplate = $info[self::IS_TEMPLATE] ?? false;
-        if ($isObjTemplate) {
-            $result['dataObjects'] = $this->extractDataObjects($value, $isObjTemplate, $id);
+        if ($isTemplate) {
+            $result[self::DATA_OBJECTS] = $this->extractDataObjects($value, $specs[self::DATA_OBJECTS_BY_ID] ?? []);
         }
 
         return $result;
