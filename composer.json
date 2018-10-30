@@ -3,13 +3,23 @@
   "type": "library",
   "homepage": "https://github.com/zionsg/sgqr-parser",
 
+  "require-dev": {
+    "phpunit/phpunit": "6"
+  },
+
   "autoload": {
     "psr-4": {
       "SgQr\\": "src/SgQr/"
     }
   },
 
-   "scripts": {
-       "test": "php tests/test.php"
-   }
+  "autoload-dev": {
+    "psr-4": {
+      "SgQrTest\\": "test/SgQr/"
+    }
+  },
+
+  "scripts": {
+      "test": "phpunit"
+  }
 }
