@@ -42,7 +42,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
   // Now
   [
-      'id' '00',
+      'id' => '00',
       'name' => 'Payload Format Indicator',
       'length' => '02',
       'value' => '01',
