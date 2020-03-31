@@ -3,6 +3,9 @@
 Parse SGQR code (Singapore Quick Response Code) as per http://www.mas.gov.sg/sgqr.
 No validation is performed at this point of time.
 
+Gave a talk on this at the December 2018 meetup for the Singapore PHP User Group - video recording
+[here](https://engineers.sg/video/writing-a-sgqr-parser-singapore-php-user-group--3061).
+
 ## Requirements
 - PHP >= 7.0
 - Composer >= 1.6.4
