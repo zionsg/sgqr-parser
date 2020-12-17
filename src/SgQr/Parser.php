@@ -48,6 +48,41 @@ class Parser
     }
 
     /**
+     * Compute CRC-CCITT checksum according to ISO/IEC 13239
+     *
+     * This yields the same checksum as SGQR - pass the contents of a SGQR code minus the last 4 characters to this
+     * function and the result should be the same as the last 4 characters of the contents of the SGQR code.
+     *
+     * @link Online CRC calculator at https://www.tahapaksu.com/crc/
+     * @link From https://stackoverflow.com/questions/30035582/how-to-calculate-crc16-ccitt-in-php-hex/30036901#30036901
+     * @param string $text Plain text to compute checksum for, e.g. "Hello World!".
+     * @param int $polynomialHex Default=0x1021. Polynomial (in hex) to use.
+     * @param int $initialValue Default=0xFFFF. Initial value (in hex) to use.
+     * @return string 4-digit hex string, e.g. 882A for text "Hello World!".
+     */
+    public function computeChecksum($text, $polynomialHex = 0x1021, $initialValue = 0xFFFF)
+    {
+        $result = $initialValue;
+        $buffer = $text;
+        $length = strlen($buffer);
+
+        if ($length > 0) {
+            for ($offset = 0; $offset < $length; $offset++) {
+                $result ^= (ord($buffer[$offset]) << 8);
+                for ($bitwise = 0; $bitwise < 8; $bitwise++) {
+                    if (($result <<= 1) & 0x10000) {
+                        $result ^= $polynomialHex;
+                    }
+
+                    $result &= 0xFFFF; // not sure if it is always 0xFFFF or should be $initialValue
+                }
+            }
+        }
+
+        return strtoupper(dechex($result));
+    }
+
+    /**
      * Extract data objects from SQQR
      *
      * @param string $text Contents of SGQR
