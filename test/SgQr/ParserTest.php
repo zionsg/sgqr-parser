@@ -29,6 +29,18 @@ final class ParserTest extends TestCase
         $this->assertEquals($expectedChecksum, $actualChecksum);
     }
 
+    /**
+     * @dataProvider qrCodeProvider
+     */
+    public function testCanAssemble($dataSetName, $qrCode, $expectedResultInJson)
+    {
+        $parser = new Parser();
+        $parsed = json_decode(trim($expectedResultInJson), true);
+        $assembled = $parser->assemble($parsed);
+
+        $this->assertEquals($qrCode, $assembled);
+    }
+
     public function qrCodeProvider()
     {
         return [
