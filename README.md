@@ -1,13 +1,10 @@
 # SGQR Parser
 
 Parse SGQR code (Singapore Quick Response Code) as per http://www.mas.gov.sg/sgqr.
+No validation is performed at this point.
 
 Gave a talk on this at the December 2018 meetup for the Singapore PHP User Group - video recording
 [here](https://engineers.sg/video/writing-a-sgqr-parser-singapore-php-user-group--3061).
-
-No validation is performed at this point of time but the method for computing the checksum is
-included in the parser - see `src/SgQr/Parser.php:computeChecksum()` and the corresponding test
-in `test/SgQr/ParserTest.php:testChecksum()` which shows how the method is used.
 
 ## Requirements
 - PHP >= 7.0
