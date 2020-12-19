@@ -1,13 +1,18 @@
 <?php
 namespace SgQr;
 
+use InvalidArgumentException;
+
 class Parser
 {
     const ROOT_DATA_OBJECTS_BY_ID = 'rootDataObjectsById';
     const INFO_TEMPLATE = 'infoTemplate';
     const TEMPLATES_BY_ID = 'templatesById';
+    const ID = 'id';
     const NAME = 'name';
+    const VALUE = 'value';
     const COMMENT = 'comment';
+    const MAX_VALUE_LENGTH = 99;
     const DATA_OBJECTS_BY_ID = 'dataObjectsById';
     const IS_TEMPLATE = 'isTemplate';
     const USES_INFO_TEMPLATE = 'usesInfoTemplate';
@@ -45,6 +50,61 @@ class Parser
     public function parse($qrCode)
     {
         return $this->extractDataObjects($qrCode);
+    }
+
+    /**
+     * Assemble SGQR
+     *
+     * This is the opposite of parse().
+     *
+     * @param array $dataObjects Extracted data objects as per return value of parse() including checksum
+     * @param boolean $isRecursiveCall Default=false. Used internally within method, not meant for user to specify.
+     * @return string Checksum will be recalculated
+     * @throws InvalidArgumentException If any data object is invalid
+     */
+    public function assemble($dataObjects, $isRecursiveCall = false)
+    {
+        $result = '';
+
+        foreach (($dataObjects ?: []) as $dataObject) {
+            $id = $dataObject[self::ID] ?? '';
+            $value = $dataObject[self::VALUE] ?? '';
+            $subDataObjects = $dataObject[self::DATA_OBJECTS] ?? [];
+            if (!$id || ('' === $value && !$subDataObjects)) {
+                throw new InvalidArgumentException('Invalid data object: ' . json_encode($dataObject));
+            }
+
+            // Recompute value from inner data objects
+            if ($subDataObjects) {
+                $value = $this->assemble($subDataObjects, true);
+            }
+
+            // Recompute length
+            $length = strlen($value);
+            if ($length > self::MAX_VALUE_LENGTH) {
+                throw new InvalidArgumentException(
+                    'Value cannot be more than ' . self::MAX_VALUE_LENGTH . ' characters: '
+                    . json_encode($dataObject)
+                );
+            }
+
+            // Assemble section
+            $section = $id . str_pad($length, 2, '0', STR_PAD_LEFT) . $value;
+            if (!$section) {
+                throw InvalidArgumentException('Could not assemble data object: ' . json_encode($dataObject));
+            }
+
+            // Append section
+            $result .= $section;
+        }
+
+        // Recompute checksum only for original method call, not recursive calls
+        if (!$isRecursiveCall) {
+            $resultWithoutChecksum = substr($result, 0, -4);
+            $result = $resultWithoutChecksum . $this->computeChecksum($resultWithoutChecksum);
+        }
+
+        return $result;
     }
 
     /**
