@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file, in reverse 
 The format follows [Keep a CHANGELOG](http://keepachangelog.com/).
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.4.1] - 2021-03-10
+
+### Added
+- Nothing.
+
+### Changed
+- Nothing.
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- `src/SgQr/Parser.php:computeChecksum()`: Pad return value to 4 characters.
+
+### Security
+- Nothing.
+
 ## [v0.4.0] - 2020-12-19
 
 ### Added
@@ -82,7 +102,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 1st release. Used at https://intzone.com/tools/sgqr.
 
-[Unreleased]: https://github.com/zionsg/sgqr-parser/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/zionsg/sgqr-parser/compare/v0.4.1...HEAD
+[v0.4.1]: https://github.com/zionsg/sgqr-parser/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/zionsg/sgqr-parser/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/zionsg/sgqr-parser/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/zionsg/sgqr-parser/compare/v0.1.0...v0.2.0
