@@ -139,7 +139,7 @@ class Parser
             }
         }
 
-        return strtoupper(dechex($result));
+        return str_pad(strtoupper(dechex($result)), 4, '0', STR_PAD_LEFT); // ensure 4 chars cos result may be shorter
     }
 
     /**
